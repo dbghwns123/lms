@@ -14,7 +14,7 @@ public class MailComponents {
 
     private final JavaMailSender javaMailSender;
 
-    // build.gradle에서 mail 관련 라이브러리 추가, yml 설정 후 간단한 이메일 보내보기(테스트용) -> 성공
+    // build.gradle 에서 mail 관련 라이브러리 추가, yml 설정 후 간단한 이메일 보내보기(테스트용) -> 성공
     public void sendMailTest() {
 
         SimpleMailMessage msg = new SimpleMailMessage();
