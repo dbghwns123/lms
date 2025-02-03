@@ -2,6 +2,7 @@ package com.zerobase.lms.member.controller;
 
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.model.MemberInput;
+import com.zerobase.lms.member.model.ResetPasswordInput;
 import com.zerobase.lms.member.repository.MemberRepository;
 import com.zerobase.lms.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
@@ -21,9 +23,29 @@ public class MemberController {
     private final MemberService memberService;
 
     @RequestMapping("/member/login")
-    public String login() {
-
+    public String login(@RequestParam(value = "message", required = false) String errorMessage, Model model) {
+        model.addAttribute("errorMessage", errorMessage);
         return "member/login";
+    }
+
+    @GetMapping("/member/find-password")
+    public String findPassword() {
+        return "member/find_password";
+    }
+
+    @PostMapping("/member/find-password")
+    public String findPasswordSubmit(Model model, ResetPasswordInput parameter) {
+
+        boolean result = false;
+        try {
+            result = memberService.sendResetPassword(parameter);
+        } catch (Exception e) {
+
+        }
+        model.addAttribute("result", result);
+
+        return "member/find_password_result";
+
     }
 
     @GetMapping("/member/register")

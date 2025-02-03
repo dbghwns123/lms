@@ -4,6 +4,7 @@ import com.zerobase.lms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -31,6 +32,7 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+//    로그인 실패 시 별도의 핸들러(UserAuthenticationFailureHandler)를 사용하도록 설정. (예를 들어, 실패 로그를 남기거나, 실패 횟수를 체크할 수도 있음.)
     @Bean
     public UserAuthenticationFailureHandler getFailureHandler() {
         return new UserAuthenticationFailureHandler();
@@ -39,16 +41,20 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // CSRF 비활성화
+                .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/member/register", "/member/email-auth").permitAll() // 특정 URL 접근 허용
-                        .anyRequest().authenticated() // 그 외 요청은 인증 필요
+                        .requestMatchers("/",
+                                "/member/register",
+                                "/member/email-auth",
+                                "/member/find-password",
+                                "/member/reset/password").permitAll() // 특정 URL 접근 허용(로그인 필요 X)
+                        .anyRequest().authenticated() // 그 외 요청은 인증 필요 (로그인 필수)
                 )
                 // 로그인 설정
                 .formLogin(login -> login
                         .loginPage("/member/login") // 로그인 페이지 경로
-                        .failureHandler(getFailureHandler()) // 로그인 실패 핸들러 적용
-                        .permitAll()
+                        .failureHandler(getFailureHandler()) // 로그인 실패 핸들러 적용 (오류로 잠시 보류)
+                        .permitAll() // /member/login 또한 접근 허용
                 )
                 // 로그아웃 설정
                 .logout(logout -> logout
@@ -65,6 +71,9 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    // DaoAuthenticationProvider를 사용하여 사용자 정보를 조회하고 인증하는 방식.
+    // memberService에서 사용자 정보를 가져옴.
+    // BCryptPasswordEncoder를 사용하여 비밀번호를 검증.
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

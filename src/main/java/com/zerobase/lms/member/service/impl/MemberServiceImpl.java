@@ -4,6 +4,7 @@ import com.zerobase.lms.components.MailComponents;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.exception.MemberNotEmailAuthException;
 import com.zerobase.lms.member.model.MemberInput;
+import com.zerobase.lms.member.model.ResetPasswordInput;
 import com.zerobase.lms.member.repository.MemberRepository;
 import com.zerobase.lms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +32,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean register(MemberInput parameter) {
 
+        /**
+         * 회원가입
+         */
+        // 이미 userId 로 가입이 되어있는지 확인
         Optional<Member> optionalMember = memberRepository.findById(parameter.getUserId());
+        // 현재 userId에 해당하는 데이터 존재하면 false 반환
         if (optionalMember.isPresent()) {
             return false;
         }
 
         String encPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt());
 
+        // 랜덤 값 생성 -> string 형식으로 변경
         String uuid = UUID.randomUUID().toString();
 
         Member member = Member.builder()
@@ -73,6 +80,29 @@ public class MemberServiceImpl implements MemberService {
         member.setEmailAuthYn(true);
         member.setEmailAuthDt(LocalDateTime.now());
         memberRepository.save(member);
+
+        return true;
+    }
+
+    @Override
+    public boolean sendResetPassword(ResetPasswordInput parameter) {
+        Optional<Member> optionalMember = memberRepository.findByUserIdAndUserName(parameter.getUserId(), parameter.getUserName());
+        if (!optionalMember.isPresent()) {
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
+        }
+        Member member = optionalMember.get();
+
+        String uuid = UUID.randomUUID().toString();
+
+        member.setResetPasswordKey(uuid);
+        member.setResetPasswordLimitDt(LocalDateTime.now().plusDays(1));
+        memberRepository.save(member);
+
+        String email = parameter.getUserId();
+        String subject = "[lms] 비밀번호 초기화 메일 입니다. ";
+        String text = "<p>lms 비밀번호 초기화 메일 입니다.<p>" + "<p>아래 링크를 클릭하셔서 비밀번호를 초기화 해주세요.</p>"+
+                "<div><a target='_blank' href='http://localhost:8080/member/reset/password?id=" + uuid + "'> 비밀번호 초기화 링크 </a></div>";
+        mailComponents.sendMail(email, subject, text);
 
         return true;
     }

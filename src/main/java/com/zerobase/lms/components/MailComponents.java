@@ -18,8 +18,11 @@ public class MailComponents {
     public void sendMailTest() {
 
         SimpleMailMessage msg = new SimpleMailMessage();
+        // 메일을 보낼 대상
         msg.setTo("hojoon1011@gmail.com");
+        // 메일 제목
         msg.setSubject("안녕하세요.");
+        // 메일 내용
         msg.setText("안녕하세요. 테스트 중입니다.");
 
         javaMailSender.send(msg);
@@ -33,8 +36,11 @@ public class MailComponents {
             @Override
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+                // 메일을 보낼 대상
                 mimeMessageHelper.setTo(mail);
+                // 메일 제목
                 mimeMessageHelper.setSubject(subject);
+                // 메일 내용 (내용과, html 설정)
                 mimeMessageHelper.setText(text, true);
             }
         };

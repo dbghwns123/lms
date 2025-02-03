@@ -1,4 +1,4 @@
-package com.zerobase.lms;
+package com.zerobase.lms.main.controller;
 
 import com.zerobase.lms.components.MailComponents;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +19,7 @@ public class MainController {
     @RequestMapping("/")
     public String index() {
 
+        // 메일 보내기 테스트용 코드
 //        String email = "hojoon1011@gmail.com";
 //        String subject = " 안녕하세요.";
 //        String text = "<p> 안녕하세요.</p><p>테스트입니다.</p>";

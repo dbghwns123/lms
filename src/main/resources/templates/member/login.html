@@ -7,9 +7,12 @@
 <body>
 
 <h1>회원 로그인</h1>
-<!--<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>-->
+<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>
 
-<div th:text="${errorMessage}">
+<!--<div th:text="${errorMessage}">-->
+<!--</div>-->
+<div th:if="${param.error}">
+  <p th:text="${param.message}">로그인에 실패하였습니다.</p>
 </div>
 
 <form method="post" action="/member/login">
@@ -26,10 +29,10 @@
 
 </form>
 
-<!--<hr/>-->
-<!--<div>-->
-<!--  <a href="/member/find-password"> 비밀번호 찾기</a>-->
-<!--</div>-->
+<hr/>
+<div>
+  <a href="/member/find-password"> 비밀번호 찾기</a>
+</div>
 
 
 

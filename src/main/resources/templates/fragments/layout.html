@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>lms</title>
+    <meta charset="UTF-8">
+    <title>fastlms</title>
 </head>
 <body>
 
-<h1>회원 로그인</h1>
-<!--<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>-->
-
-<div th:text="${errorMessage}">
+<div th:fragment="fragment-body-menu">
+    <div>
+        <a href="/member/register">회원 가입</a>
+        |
+        <a href="/member/info">회원 정보</a>
+        |
+        <a href="/member/login">로그인</a>
+        |
+        <a href="/member/logout">로그아웃</a>
+    </div>
+    <hr/> <!--줄바꿈표시-->
 </div>
 
-<form method="post" action="/member/login">
 
-  <div>
-    <input type="text" name="username" placeholder="아이디(이메일)을 입력" required/>
-  </div>
-  <div>
-    <input type="password" name="password" placeholder="비밀번호 입력" required/>
-  </div>
-  <div>
-    <button type="submit"> 로그인 </button>
-  </div>
-
-</form>
-
-<!--<hr/>-->
-<!--<div>-->
-<!--  <a href="/member/find-password"> 비밀번호 찾기</a>-->
+<!--<div th:fragment="fragment-admin-body-menu">-->
+<!--    <a href="/admin/main.do"> 관리자 메인 </a>-->
+<!--    |-->
+<!--    <a href="/admin/member/list.do"> 회원 관리 </a>-->
+<!--    |-->
+<!--    <a href="/admin/category/list.do"> 카테고리 관리 </a>-->
+<!--    |-->
+<!--    <a href="/admin/course/list.do"> 강좌 관리 </a>-->
+<!--    |-->
+<!--    <a href="/member/logout"> 로그아웃 </a>-->
+<!--    <br/>-->
+<!--    <hr/>-->
 <!--</div>-->
-
 
 
 </body>
