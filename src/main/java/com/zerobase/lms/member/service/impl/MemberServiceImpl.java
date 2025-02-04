@@ -1,5 +1,7 @@
 package com.zerobase.lms.member.service.impl;
 
+import com.zerobase.lms.admin.dto.MemberDto;
+import com.zerobase.lms.admin.mapper.MemberMapper;
 import com.zerobase.lms.components.MailComponents;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.exception.MemberNotEmailAuthException;
@@ -28,6 +30,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MailComponents mailComponents;
+
+    private final MemberMapper memberMapper;
 
     @Override
     public boolean register(MemberInput parameter) {
@@ -165,9 +169,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> list() {
+    public List<MemberDto> list() {
 
-        return memberRepository.findAll();
+        MemberDto parameter = new MemberDto();
+        List<MemberDto> list = memberMapper.selectList(parameter);
+        return list;
+//        return memberRepository.findAll();
 
     }
 
