@@ -48,8 +48,10 @@ public class SecurityConfiguration {
                                 "/member/email-auth",
                                 "/member/find-password",
                                 "/member/reset/password").permitAll() // 특정 URL 접근 허용(로그인 필요 X)
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN") // 관리자 권한 필요
                         .anyRequest().authenticated() // 그 외 요청은 인증 필요 (로그인 필수)
                 )
+
                 // 로그인 설정
                 .formLogin(login -> login
                         .loginPage("/member/login") // 로그인 페이지 경로
@@ -61,12 +63,12 @@ public class SecurityConfiguration {
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) // 로그아웃 요청 경로
                         .logoutSuccessUrl("/") // 로그아웃 성공 후 리다이렉트 경로
                         .invalidateHttpSession(true) // 세션 초기화
-                );
+                )
 
                 // 예외 처리
-//                .exceptionHandling(exception -> exception
-//                        .accessDeniedPage("/error/denied") // 접근 권한 없는 경우 리다이렉트 경로
-//                );
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/error/denied") // 접근 권한 없는 경우 리다이렉트 경로
+                );
 
         return http.build();
     }

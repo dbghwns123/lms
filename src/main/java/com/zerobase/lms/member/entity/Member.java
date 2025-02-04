@@ -33,4 +33,11 @@ public class Member {
     // 비밀번호 초기화를 한 이후 유효기간
     private LocalDateTime resetPasswordLimitDt;
 
+    // 관리자 여부를 지정할 것인지
+    // 회원에 따른 ROLE 을 지정할 것인지 정해야함
+    // 준회원/정회원/특별회원/관리자
+    // ROLE_SEMI_USER, ROLE_USER, ROLE_SPECIAL_USER,ROLE_ADMIN
+    // 여기서는 단순히 관리자인지 일반 유저인지에 대해서만 관리
+    private boolean adminYn;
+
 }
