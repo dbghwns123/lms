@@ -45,6 +45,7 @@ public class MemberController {
         model.addAttribute("result", result);
 
         return "member/find_password_result";
+//        return "redirect:/";   // 리다이렉트 초기페이지
 
     }
 
@@ -85,5 +86,32 @@ public class MemberController {
     @GetMapping("/member/info")
     public String memberInfo() {
         return "member/info";
+    }
+
+    // 메일로 발송된 비밀번호 초기화 링크
+    @GetMapping("/member/reset/password")
+    public String resetPassword(Model model, HttpServletRequest request) {
+        String uuid = request.getParameter("id");
+
+        boolean result = memberService.checkResetPassword(uuid);
+
+        model.addAttribute("result", result);
+
+        return "member/reset_password";
+    }
+
+    @PostMapping("/member/reset/password")
+    public String resetPasswordSubmit(Model model, ResetPasswordInput parameter) {
+
+        boolean result = false;
+        try {
+            // 예외가 발생할 수 있으므로 try - catch 로 감싸기
+            result = memberService.resetPassword(parameter.getId(), parameter.getPassword());
+        } catch (Exception e) {
+        }
+
+        model.addAttribute("result", result);
+
+        return "member/reset_password_result";
     }
 }

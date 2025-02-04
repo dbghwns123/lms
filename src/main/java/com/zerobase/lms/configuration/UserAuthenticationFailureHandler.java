@@ -17,6 +17,7 @@ public class UserAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
 
         String msg = "로그인에 실패하였습니다";
 
+        // 이메일 인증을 받지 않았을때 나오는 오류를 잡음 -> msg가 이메일 인증 이후에 로그인을 해주세요. 로 바뀜
         if (exception instanceof InternalAuthenticationServiceException) {
             msg = exception.getMessage();
         }

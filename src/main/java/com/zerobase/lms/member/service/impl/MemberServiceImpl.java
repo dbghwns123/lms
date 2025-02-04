@@ -42,9 +42,10 @@ public class MemberServiceImpl implements MemberService {
             return false;
         }
 
+        // 비밀번호 암호화
         String encPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt());
 
-        // 랜덤 값 생성 -> string 형식으로 변경
+        // email 인증 키를 UUID를 사용하여 랜덤 값으로 생성 -> string 형식으로 변경
         String uuid = UUID.randomUUID().toString();
 
         Member member = Member.builder()
@@ -84,6 +85,7 @@ public class MemberServiceImpl implements MemberService {
         return true;
     }
 
+    // 비밀번호 초기화
     @Override
     public boolean sendResetPassword(ResetPasswordInput parameter) {
         Optional<Member> optionalMember = memberRepository.findByUserIdAndUserName(parameter.getUserId(), parameter.getUserName());
@@ -92,6 +94,7 @@ public class MemberServiceImpl implements MemberService {
         }
         Member member = optionalMember.get();
 
+        // resetPasswordKey 에 들어갈 값 새로 생성(UUID)
         String uuid = UUID.randomUUID().toString();
 
         member.setResetPasswordKey(uuid);
@@ -103,6 +106,54 @@ public class MemberServiceImpl implements MemberService {
         String text = "<p>lms 비밀번호 초기화 메일 입니다.<p>" + "<p>아래 링크를 클릭하셔서 비밀번호를 초기화 해주세요.</p>"+
                 "<div><a target='_blank' href='http://localhost:8080/member/reset/password?id=" + uuid + "'> 비밀번호 초기화 링크 </a></div>";
         mailComponents.sendMail(email, subject, text);
+
+        return true;
+    }
+
+    @Override
+    public boolean resetPassword(String uuid, String password) {
+
+        Optional<Member> optionalMember = memberRepository.findByResetPasswordKey(uuid);
+        if (!optionalMember.isPresent()) {
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다");
+        }
+
+        Member member = optionalMember.get();
+
+        // 초기화 날짜가 유효한지 체크 필수
+        if (member.getResetPasswordLimitDt() == null) {
+            throw new RuntimeException(" 유효한 날짜가 아닙니다. ");
+        }
+
+        if (member.getResetPasswordLimitDt().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException(" 유효한 날짜가 아닙니다. ");
+        }
+
+        String encPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+        member.setPassword(encPassword);
+        member.setResetPasswordKey("");
+        member.setResetPasswordLimitDt(null);
+        memberRepository.save(member);
+        return true;
+    }
+
+    @Override
+    public boolean checkResetPassword(String uuid) {
+        Optional<Member> optionalMember = memberRepository.findByResetPasswordKey(uuid);
+        if (!optionalMember.isPresent()) {
+            return false;
+        }
+
+        Member member = optionalMember.get();
+
+        // 초기화 날짜가 유효한지 체크 필수
+        if (member.getResetPasswordLimitDt() == null) {
+            throw new RuntimeException(" 유효한 날짜가 아닙니다. ");
+        }
+
+        if (member.getResetPasswordLimitDt().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException(" 유효한 날짜가 아닙니다. ");
+        }
 
         return true;
     }
