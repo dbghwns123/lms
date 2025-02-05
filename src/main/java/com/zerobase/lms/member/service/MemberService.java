@@ -1,6 +1,7 @@
 package com.zerobase.lms.member.service;
 
 import com.zerobase.lms.admin.dto.MemberDto;
+import com.zerobase.lms.admin.model.MemberParam;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.model.MemberInput;
 import com.zerobase.lms.member.model.ResetPasswordInput;
@@ -36,5 +37,6 @@ public interface MemberService extends UserDetailsService {
     /**
      * 회원 목록 리턴(관리자에서만 사용 가능)
      */
-    List<MemberDto> list();
+    List<MemberDto> list(MemberParam parameter);
+
 }
