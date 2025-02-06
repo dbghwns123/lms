@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Entity
-public class Member {
+public class Member implements MemberCode{
 
     @Id
     private String userId;
@@ -39,5 +39,8 @@ public class Member {
     // ROLE_SEMI_USER, ROLE_USER, ROLE_SPECIAL_USER,ROLE_ADMIN
     // 여기서는 단순히 관리자인지 일반 유저인지에 대해서만 관리
     private boolean adminYn;
+
+    // enum 으로 변경해도 좋음
+    private String userStatus; // 현재 user의 계정이 이용가능한 상태인지, 정지상태인지
 
 }
