@@ -31,12 +31,37 @@
 
 <!--    </sql>-->
 
-<!--    <select id="selectListCount" resultType="long">-->
-<!--        select count(*)-->
-<!--        from member-->
-<!--        where 1 = 1-->
-<!--        <include refid="selectListWhere"/>-->
-<!--    </select>-->
+    <select id="selectListCount"
+            parameterType="com.zerobase.lms.admin.model.MemberParam"
+            resultType="long">
+        select count(*)
+        from member
+        where 1 = 1
+
+        <if test="searchType != null and searchValue != null">
+            <choose>
+                <when test="searchType == 'userId'">
+                    and user_id like concat('%', #{searchValue},'%')
+                </when>
+                <when test="searchType == 'userName'">
+                    and user_name like concat('%', #{searchValue},'%')
+                </when>
+                <when test="searchType == 'phone'">
+                    and phone like concat('%', #{searchValue},'%')
+                </when>
+                <otherwise>
+                    and (
+                    user_id like concat('%', #{searchValue},'%')
+                    or user_name like concat('%', #{searchValue},'%')
+                    or phone like concat('%', #{searchValue},'%')
+                    )
+                </otherwise>
+            </choose>
+        </if>
+
+
+
+    </select>
 
     <select id="selectList"
             parameterType="com.zerobase.lms.admin.model.MemberParam"
@@ -58,17 +83,15 @@
                 </when>
                 <otherwise>
                     and (
-                        userId like concat('%', #{searchValue},'%')
-                        or userName like concat('%', #{searchValue},'%')
-                        or phone like concat('%', #{searchValue},'%')
+                    user_id like concat('%', #{searchValue},'%')
+                    or user_name like concat('%', #{searchValue},'%')
+                    or phone like concat('%', #{searchValue},'%')
                     )
                 </otherwise>
             </choose>
         </if>
 
-<!--        <include refid="selectListWhere"/>-->
-
-
+        limit #{pageStart}, #{pageEnd}
     </select>
 
 </mapper>
