@@ -2,6 +2,8 @@ package com.zerobase.lms.course.model;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CourseInput {
 
@@ -15,7 +17,8 @@ public class CourseInput {
     long salePrice;
     String saleEndDtText;
 
-    //삭제를 위한
+    //삭제를 위한 속성
     String idList;
+//    List<String> ids;
 
 }
