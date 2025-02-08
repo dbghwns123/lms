@@ -16,11 +16,12 @@ import java.util.List;
 public class CategoryDto {
 
     Long id;
-
     String categoryName;
     int sortValue;
-
     boolean usingYn;
+
+    // ADD COLUMNS
+    int courseCount;
 
     public static List<CategoryDto> of(List<Category> categories) {
         List<CategoryDto> categoryList = new ArrayList<>();

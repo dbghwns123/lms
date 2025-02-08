@@ -128,4 +128,20 @@ public class CourseServiceImpl implements CourseService {
 
         return true;
     }
+
+    @Override
+    public List<CourseDto> frontList(CourseParam parameter) {
+
+        // 전체인 경우
+        if (parameter.getCategoryId() < 1) {
+            List<Course> courseList = courseRepository.findAll();
+            return CourseDto.of(courseList);
+        }
+
+        Optional<List<Course>> optionalCourses = courseRepository.findByCategoryId(parameter.getCategoryId());
+        if (optionalCourses.isPresent()) {
+            return CourseDto.of(optionalCourses.get());
+        }
+        return null;
+    }
 }
