@@ -64,6 +64,7 @@ public class MemberServiceImpl implements MemberService {
                 .regDt(LocalDateTime.now())
                 .emailAuthYn(false)
                 .emailAuthKey(uuid)
+                // 회원가입을 처음 했을때는 가입 요청중 상태 부여
                 .userStatus(Member.MEMBER_STATUS_REQ)
                 .build();
 
@@ -71,6 +72,7 @@ public class MemberServiceImpl implements MemberService {
 
         String email = parameter.getUserId();
         String subject = "lms 사이트 가입을 축하드립니다.";
+        // target='_blank' -> 계속해서 새 창으로 열림
         String text = "<p>lms 사이트 가입을 축하드립니다.<p><p>아래 링크를 클릭하셔서 가입을 완료 하세요.</p>"
                 + "<div><a target='_blank' href='http://localhost:8080/member/email-auth?id=" + uuid + "'> 가입 완료 </a></div>";
         mailComponents.sendMail(email, subject, text);
@@ -94,6 +96,7 @@ public class MemberServiceImpl implements MemberService {
             return false;
         }
 
+        // 이메일 인증을 완료한 후에는 '현재 이용 가능한 상태' 부여
         member.setUserStatus(MemberCode.MEMBER_STATUS_ING);
         member.setEmailAuthYn(true);
         member.setEmailAuthDt(LocalDateTime.now());
@@ -249,7 +252,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = optionalMember.get();
 
-        // 검증을 이렇게 해도 됨
+        // 현재 부여된 사용자 상태에 따라서 검증
         if (Member.MEMBER_STATUS_REQ.equals(member.getUserStatus())) {
             throw new MemberNotEmailAuthException("이메일 인증 이후에 로그인을 해주세요.");
         }

@@ -22,6 +22,7 @@ public class AdminCourseController extends BaseController{
     private final CourseService courseService;
     private final CategoryService categoryService;
 
+    // 강좌 목록
     @GetMapping("/admin/course/list.do")
     public String list(Model model, CourseParam parameter) {
 

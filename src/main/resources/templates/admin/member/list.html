@@ -55,7 +55,9 @@
             <button type="submit">검색</button>
         </form>
     </div>
+
     <table>
+<!--        <thead> 태그는 HTML 테이블에서 헤더 콘텐츠(header content)들을 하나의 그룹으로 묶을 때 사용-->
         <thead>
         <tr>
             <th>NO</th>
@@ -79,6 +81,7 @@
             </th>
         </tr>
         </thead>
+
         <tbody>
         <tr th:each="x : ${list}">
             <td th:text="${x.seq}">1</td>

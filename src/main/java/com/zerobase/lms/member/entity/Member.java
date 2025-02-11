@@ -40,7 +40,7 @@ public class Member implements MemberCode{
     // 여기서는 단순히 관리자인지 일반 유저인지에 대해서만 관리
     private boolean adminYn;
 
-    // enum 으로 변경해도 좋음
+    // enum 으로 변경해도 좋음 (MemberCode 인터페이스 상속)
     private String userStatus; // 현재 user의 계정이 이용가능한 상태인지, 정지상태인지
 
 }

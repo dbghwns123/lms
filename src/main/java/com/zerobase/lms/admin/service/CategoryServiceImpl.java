@@ -37,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
         //카테고리명이 중복인지 체크
 
 
+
         Category category = Category.builder()
                 .categoryName(categoryName)
                 .usingYn(true)

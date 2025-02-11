@@ -20,6 +20,7 @@ public class AdminMemberController extends BaseController {
 
     private final MemberService memberService;
 
+    // 유저 목록
     @GetMapping("/admin/member/list.do")
     public String list(Model model, MemberParam parameter) {
 
@@ -41,6 +42,7 @@ public class AdminMemberController extends BaseController {
 
         return "admin/member/list";
     }
+    // 유저 상세정보
     @GetMapping("/admin/member/detail.do")
     public String detail(Model model, MemberParam parameter) {
 
@@ -52,6 +54,7 @@ public class AdminMemberController extends BaseController {
         return "admin/member/detail";
     }
 
+    // admin 유저의 상태정보 업데이트
     @PostMapping("/admin/member/status.do")
     public String status(Model model, MemberInput parameter) {
         boolean result = memberService.updateStatus(parameter.getUserId(), parameter.getUserStatus());
@@ -59,6 +62,7 @@ public class AdminMemberController extends BaseController {
         return "redirect:/admin/member/detail.do?userId=" + parameter.getUserId();
     }
 
+    // admin 비밀번호 초기화
     @PostMapping("/admin/member/password.do")
     public String password(Model model, MemberInput parameter) {
         boolean result = memberService.updatePassword(parameter.getUserId(), parameter.getPassword());

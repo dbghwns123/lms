@@ -27,7 +27,8 @@
     <script>
         $(document).ready(function() {
 
-            $('form[name=deleteForm]').on('submit', function() {
+            $('form[name=deleteForm]').on('submit', function () {
+                // 아니요를 누르면 return false
                 if (!confirm(' 카테고리를 삭제하시겠습니까? ')) {
                     return false;
                 }
@@ -123,6 +124,7 @@
                 </div>
             </td>
         </tr>
+<!--        리스트에 값이 없으면 "내용이 없습니다." 출력-->
         <tr th:if="${#lists.size(list) < 1}">
             <td colspan="5" >
                 <p class="nothing">내용이 없습니다.</p>
