@@ -100,9 +100,7 @@ public class MemberController {
     }
 
     @PostMapping("/member/info")
-    public String memberInfoSubmit(Model model
-            , MemberInput parameter
-            , Principal principal) {
+    public String memberInfoSubmit(Model model, MemberInput parameter, Principal principal) {
 
         String userId = principal.getName();
         parameter.setUserId(userId);
