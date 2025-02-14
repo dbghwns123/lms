@@ -4,6 +4,7 @@ import com.zerobase.lms.admin.dto.MemberDto;
 import com.zerobase.lms.admin.mapper.MemberMapper;
 import com.zerobase.lms.admin.model.MemberParam;
 import com.zerobase.lms.components.MailComponents;
+import com.zerobase.lms.course.model.ServiceResult;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.entity.MemberCode;
 import com.zerobase.lms.member.exception.MemberNotEmailAuthException;
@@ -240,6 +241,29 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         return true;
+    }
+
+    @Override
+    public ServiceResult updateMemberPassword(MemberInput parameter) {
+
+        String userId = parameter.getUserId();
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            return new ServiceResult(false, "회원 정보가 존재하지 않습니다.");
+        }
+
+        Member member = optionalMember.get();
+
+        if (!PasswordUtils.equals(parameter.getPassword(), member.getPassword())) {
+            return new ServiceResult(false, "비밀번호가 일치하지 않습니다.");
+        }
+
+        String encPassword = PasswordUtils.encPassword(parameter.getNewPassword());
+        member.setPassword(encPassword);
+        memberRepository.save(member);
+
+        return new ServiceResult(true);
     }
 
     @Override

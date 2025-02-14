@@ -2,6 +2,7 @@ package com.zerobase.lms.member.service;
 
 import com.zerobase.lms.admin.dto.MemberDto;
 import com.zerobase.lms.admin.model.MemberParam;
+import com.zerobase.lms.course.model.ServiceResult;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.model.MemberInput;
 import com.zerobase.lms.member.model.ResetPasswordInput;
@@ -53,4 +54,14 @@ public interface MemberService extends UserDetailsService {
      * 회원 비밀번호 초기화
      */
     boolean updatePassword(String userId, String password);
+
+    /**
+     * 회원정보 수정
+     */
+    ServiceResult updateMember(MemberInput parameter);
+
+    /**
+     * 회원 정보 페이지내 비밀번호 변경 기능
+     */
+    ServiceResult updateMemberPassword(MemberInput parameter);
 }
