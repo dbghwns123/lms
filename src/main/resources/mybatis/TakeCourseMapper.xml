@@ -35,6 +35,7 @@
         limit #{pageStart}, #{pageEnd}
     </select>
 
+<!--    추가된 부분-->
     <!-- userId에 해당하는 수강신청 정보 -->
     <select id="selectListMyCourse" resultType="com.zerobase.lms.course.dto.TakeCourseDto">
         select tc.*

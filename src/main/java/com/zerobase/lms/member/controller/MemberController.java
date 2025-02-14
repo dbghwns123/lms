@@ -3,6 +3,7 @@ package com.zerobase.lms.member.controller;
 import com.zerobase.lms.admin.dto.MemberDto;
 import com.zerobase.lms.course.dto.TakeCourseDto;
 import com.zerobase.lms.course.model.ServiceResult;
+import com.zerobase.lms.course.service.TakeCourseService;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.model.MemberInput;
 import com.zerobase.lms.member.model.ResetPasswordInput;
@@ -26,6 +27,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final TakeCourseService takeCourseService;
 
     @RequestMapping("/member/login")
     public String login(@RequestParam(value = "message", required = false) String errorMessage, Model model) {
