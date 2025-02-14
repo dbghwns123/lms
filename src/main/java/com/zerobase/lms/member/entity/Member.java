@@ -44,4 +44,8 @@ public class Member implements MemberCode{
     // enum 으로 변경해도 좋음 (MemberCode 인터페이스 상속)
     private String userStatus; // 현재 user의 계정이 이용가능한 상태인지, 정지상태인지
 
+    private String zipcode;
+    private String addr;
+    private String addrDetail;
+
 }
