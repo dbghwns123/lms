@@ -1,5 +1,6 @@
 package com.zerobase.lms.member.controller;
 
+import com.zerobase.lms.admin.dto.MemberDto;
 import com.zerobase.lms.member.entity.Member;
 import com.zerobase.lms.member.model.MemberInput;
 import com.zerobase.lms.member.model.ResetPasswordInput;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 @Controller
@@ -84,7 +86,13 @@ public class MemberController {
     }
 
     @GetMapping("/member/info")
-    public String memberInfo() {
+    public String memberInfo(Model model, Principal principal) {
+
+        String userId = principal.getName();
+        MemberDto detail = memberService.detail(userId);
+
+        model.addAttribute("detail", detail);
+
         return "member/info";
     }
 
