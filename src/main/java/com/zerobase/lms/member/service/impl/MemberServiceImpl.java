@@ -13,6 +13,7 @@ import com.zerobase.lms.member.model.MemberInput;
 import com.zerobase.lms.member.model.ResetPasswordInput;
 import com.zerobase.lms.member.repository.MemberRepository;
 import com.zerobase.lms.member.service.MemberService;
+import com.zerobase.lms.util.PasswordUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -289,6 +290,39 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public ServiceResult withdraw(String userId, String password) {
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if (!optionalMember.isPresent()) {
+            return new ServiceResult(false, "회원 정보가 존재하지 않습니다.");
+        }
+
+        Member member = optionalMember.get();
+
+        if (!PasswordUtils.equals(password, member.getPassword())) {
+            return new ServiceResult(false, "비밀번호가 일치하지 않습니다.");
+        }
+
+        member.setUserName("삭제회원");
+        member.setPhone("");
+        member.setPassword("");
+        member.setRegDt(null);
+        member.setUdtDt(null);
+        member.setEmailAuthYn(false);
+        member.setEmailAuthDt(null);
+        member.setEmailAuthKey("");
+        member.setResetPasswordKey("");
+        member.setResetPasswordLimitDt(null);
+        member.setUserStatus(MemberCode.MEMBER_STATUS_WITHDRAW);
+        member.setZipcode("");
+        member.setAddr("");
+        member.setAddrDetail("");
+        memberRepository.save(member);
+
+        return new ServiceResult();
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<Member> optionalMember = memberRepository.findById(username);
@@ -305,6 +339,10 @@ public class MemberServiceImpl implements MemberService {
         // 정지된 회원일 경우
         if (Member.MEMBER_STATUS_STOP.equals(member.getUserStatus())) {
             throw new MemberStopUserException("정지된 회원 입니다.");
+        }
+
+        if (Member.MEMBER_STATUS_WITHDRAW.equals(member.getUserStatus())) {
+            throw new MemberStopUserException("탈퇴된 회원 입니다.");
         }
 
         // 이메일 인증을 받지 않았다면
