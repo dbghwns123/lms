@@ -21,4 +21,8 @@ public class CourseInput {
     String idList;
 //    List<String> ids;
 
+    // ADD
+    String filename;
+    String urlFilename;
+
 }

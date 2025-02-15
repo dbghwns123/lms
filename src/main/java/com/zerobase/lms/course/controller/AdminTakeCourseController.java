@@ -34,7 +34,7 @@ public class AdminTakeCourseController extends BaseController {
             totalCount = list.get(0).getTotalCount();
         }
         String queryString = parameter.getQueryString();
-        String pagerHtml = getPaperHtml(totalCount, parameter.getPageSize(), parameter.getPageIndex(), queryString);
+        String pagerHtml = getPagerHtml(totalCount, parameter.getPageSize(), parameter.getPageIndex(), queryString);
 
         model.addAttribute("list", list);
         model.addAttribute("totalCount", totalCount);
